@@ -1,0 +1,65 @@
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+$(function() {
+
+   //$("button, input:submit").button();
+
+    // validator ayarları (genel mesajlar)
+   if(jQuery.validator) {
+        $.extend($.validator.messages, {
+            required: "Bu alanı doldurmalısınız.",
+            email: "Buraya geçerli bir e-posta girmelisiniz.",
+            url: "Buraya geçerli bir web adresi girmelisiniz.",
+            equalTo: "Yukarıdaki ile aynı değeri girmelisiniz",
+            minlength: "Lütfen uyarıları okuyunuz. Minimum değere uymalısınız."
+        });
+   
+        $.validator.addMethod('linkCode', function (value) {
+            return /^[a-zA-Z0-9_-]+$/.test(value);
+        }, 'Alfabetik karakterler, sayılar, alt çizgi (_) ve tire işareti (-) dışında karakter bulunamaz. Türkçe karakterleri kullanmayınız (ö,ç,ş,ı,ğ,ü,İ)');
+    }
+
+    if ($('#flash-message')) {
+        $('#flash-message').dialog({
+            title: 'You have got a message',
+            autoOpen: true,
+            width: 300,
+            height: 200,
+            modal: true,
+            buttons: {
+            "Kapat": function() {
+                        $(this).dialog('close');
+                    }
+            }
+        });
+    }
+
+    if ($('#print-message')) {
+        $('#print-message').dialog({
+            title: 'You have got a message',
+            autoOpen: true,
+            width: 500,
+            height: 400,
+            modal: true,
+            buttons: {
+                "Kapat": function() {
+                    $(this).dialog('close');
+                },
+                "Çıktı Al": function () {
+                    let printer = window.open();
+                    printer.document.write(
+                        '<html><head><style>@media print { @page { size: A6 landscape; } }</style></head><body>' +
+                        '<span style="font-size: 28px; line-height: 40px;">' +
+                        $('#print-only-section').html() +
+                        '</span></body></html>'
+                    );
+                    printer.print();
+                    printer.close();
+                }
+            }
+        });
+    }
+});
